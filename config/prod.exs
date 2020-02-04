@@ -10,11 +10,15 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :learn_webdev_with_elixir, LearnWebdevWithElixirWeb.Endpoint,
-  url: [host: "example.com", port: 80],
+  url: [scheme: "https", host: "intense-tundra-88578.herokuapp.com", port: 443],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
 config :logger, level: :info
+
+config(:chat, LearnWebdevWithElixirWeb.Endpoint,
+  check_origin: ["//intense-tundra-88578.herokuapp.com"]
+)
 
 # ## SSL Support
 #

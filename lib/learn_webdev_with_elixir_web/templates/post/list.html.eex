@@ -4,7 +4,7 @@
       <%= for post <- @posts do %>
         <div class="blog-post">
           <h2 class="blog-post-title"><%= post.title %></h2>
-          <p class="blog-post-meta">January 1, 2014 by <a href="#">Justus</a></p>
+          <p class="blog-post-meta">January 1, 2020 by <a href="#">Justus</a></p>
           <%= post.body %>
         </div>
       <% end %>
@@ -14,7 +14,5 @@
         <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
       </nav>
     </div>
-
-
   </div>
 </div>

@@ -1,0 +1,28 @@
+<div class="blog-post">
+  <h2 class="blog-post-title"><%= @post.title %></h2>
+  <p class="blog-post-meta">January 1, 2014 by <a href="#">Justus</a></p>
+  <%= @post.body %>
+</div>
+
+
+<h5>Comments</h5>
+
+<div>
+  <%= for comment <- @post.comments do%>
+    <p><div class="comment"><%= comment.body %> <small>by Max</small></div></p>
+  <% end %>
+</div>
+
+<h3>Add a comment</h3>
+
+
+<%= form_for @comment_changeset, Routes.post_comment_path(@conn, :create, @post), fn f -> %>
+  <%= label f, :Comment %>
+  <%= textarea f, :body, class: "form-control" %>
+  <%= error_tag f, :body %>
+  <div>
+    <%= submit "Submit", class: "btn-primary" %>
+  </div>
+<% end %>
+
+<span><%= link "Back", to: Routes.post_path(@conn, :list) %></span>

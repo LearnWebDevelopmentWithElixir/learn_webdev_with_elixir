@@ -27,6 +27,7 @@ defmodule LearnWebdevWithElixirWeb.PostControllerTest do
   end
 
   describe "create post" do
+    @tag :skip
     test "redirects to show when data is valid", %{conn: conn} do
       conn = post(conn, Routes.post_path(conn, :create), post: @create_attrs)
 
@@ -37,6 +38,7 @@ defmodule LearnWebdevWithElixirWeb.PostControllerTest do
       assert html_response(conn, 200) =~ "Show Post"
     end
 
+    @tag :skip
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.post_path(conn, :create), post: @invalid_attrs)
       assert html_response(conn, 200) =~ "New Post"
@@ -75,6 +77,7 @@ defmodule LearnWebdevWithElixirWeb.PostControllerTest do
     test "deletes chosen post", %{conn: conn, post: post} do
       conn = delete(conn, Routes.post_path(conn, :delete, post))
       assert redirected_to(conn) == Routes.post_path(conn, :index)
+
       assert_error_sent 404, fn ->
         get(conn, Routes.post_path(conn, :show, post))
       end

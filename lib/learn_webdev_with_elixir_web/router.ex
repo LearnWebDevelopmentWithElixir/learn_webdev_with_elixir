@@ -7,6 +7,11 @@ defmodule LearnWebdevWithElixirWeb.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+    plug LearnWebdevWithElixirWeb.Plugs.FetchUser
+  end
+
+  pipeline :logged_in do
+    plug LearnWebdevWithElixirWeb.Plugs.EnsureUser
   end
 
   pipeline :api do
@@ -18,12 +23,23 @@ defmodule LearnWebdevWithElixirWeb.Router do
 
     resources("/users", UserController)
 
+    get("/", PostController, :list)
+
+    get("/register", RegistrationController, :new)
+    post("/register", RegistrationController, :create)
+
+    get("/sign-in", SessionController, :new)
+    post("/sign-in", SessionController, :create)
+    delete("/sign-out", SessionController, :delete)
+  end
+
+  scope "/", LearnWebdevWithElixirWeb do
+    pipe_through([:browser, :logged_in])
+
     resources("/posts", PostController) do
       resources("/comments", CommentController)
       get("/list", PostController, :list)
     end
-
-    get("/", PostController, :list)
   end
 
   # Other scopes may use custom stacks.

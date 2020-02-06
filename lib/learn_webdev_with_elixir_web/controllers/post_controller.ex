@@ -21,7 +21,9 @@ defmodule LearnWebdevWithElixirWeb.PostController do
   end
 
   def create(conn, %{"post" => post_params}) do
-    case Content.create_post(post_params) do
+    %{current_user: user} = conn.assigns
+
+    case Content.create_post(user, post_params) do
       {:ok, post} ->
         conn
         |> put_flash(:info, "Post created successfully.")

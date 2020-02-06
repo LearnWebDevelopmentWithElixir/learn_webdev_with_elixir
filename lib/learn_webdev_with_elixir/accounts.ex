@@ -1,4 +1,6 @@
 defmodule LearnWebdevWithElixir.Accounts do
+  alias Stein.Accounts
+
   @moduledoc """
   The Accounts context.
   """
@@ -7,6 +9,18 @@ defmodule LearnWebdevWithElixir.Accounts do
   alias LearnWebdevWithElixir.Repo
 
   alias LearnWebdevWithElixir.Accounts.User
+
+  def new(), do: Ecto.Changeset.change(%User{}, %{})
+
+  def from_token(token) do
+    case Repo.get_by(User, token: token) do
+      nil ->
+        {:error, :not_found}
+
+      user ->
+        {:ok, user}
+    end
+  end
 
   @doc """
   Returns the list of users.
@@ -51,8 +65,24 @@ defmodule LearnWebdevWithElixir.Accounts do
   """
   def create_user(attrs \\ %{}) do
     %User{}
-    |> User.changeset(attrs)
+    |> User.create_changeset(attrs)
     |> Repo.insert()
+  end
+
+  def update(user, params) do
+    changeset = User.update_changeset(user, params)
+
+    case Repo.update(changeset) do
+      {:ok, user} ->
+        {:ok, user}
+
+      {:error, changeset} ->
+        {:error, changeset}
+    end
+  end
+
+  def validate_login(email, password) do
+    Accounts.validate_login(Repo, User, email, password)
   end
 
   @doc """
@@ -69,7 +99,7 @@ defmodule LearnWebdevWithElixir.Accounts do
   """
   def update_user(%User{} = user, attrs) do
     user
-    |> User.changeset(attrs)
+    |> User.update_changeset(attrs)
     |> Repo.update()
   end
 
@@ -99,6 +129,6 @@ defmodule LearnWebdevWithElixir.Accounts do
 
   """
   def change_user(%User{} = user) do
-    User.changeset(user, %{})
+    User.update_changeset(user, %{})
   end
 end

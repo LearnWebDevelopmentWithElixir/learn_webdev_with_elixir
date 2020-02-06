@@ -8,6 +8,7 @@ defmodule LearnWebdevWithElixir.Content do
 
   alias LearnWebdevWithElixir.Content.Post
   alias LearnWebdevWithElixir.Content.Post.Comment
+  alias LearnWebdevWithElixir.Accounts.User
 
   @doc """
   Returns the list of posts.
@@ -19,7 +20,9 @@ defmodule LearnWebdevWithElixir.Content do
 
   """
   def list_posts do
-    Repo.all(Post)
+    Post
+    |> Repo.all()
+    |> Repo.preload(:user)
   end
 
   @doc """
@@ -39,7 +42,8 @@ defmodule LearnWebdevWithElixir.Content do
   def get_post!(id) do
     Post
     |> Repo.get!(id)
-    |> Repo.preload(:comments)
+    |> Repo.preload(:user)
+    |> Repo.preload(comments: [:user])
   end
 
   @doc """
@@ -54,8 +58,9 @@ defmodule LearnWebdevWithElixir.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_post(attrs \\ %{}) do
-    %Post{}
+  def create_post(%User{} = user, attrs \\ %{}) do
+    user
+    |> Ecto.build_assoc(:posts)
     |> Post.changeset(attrs)
     |> Repo.insert()
   end
@@ -150,7 +155,7 @@ defmodule LearnWebdevWithElixir.Content do
   """
   def create_comment(%Post{} = post, attrs \\ %{}) do
     post
-    |> Ecto.build_assoc(:comments)
+    |> Ecto.build_assoc(:comments, user_id: post.user_id)
     |> Comment.changeset(attrs)
     |> Repo.insert()
   end

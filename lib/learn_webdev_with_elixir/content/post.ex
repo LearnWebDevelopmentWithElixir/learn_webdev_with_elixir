@@ -8,7 +8,7 @@ defmodule LearnWebdevWithElixir.Content.Post do
   schema "posts" do
     field :body, :string
     field :title, :string
-    belongs_to :author, User
+    belongs_to :user, User
     has_many :comments, Comment
     timestamps()
   end

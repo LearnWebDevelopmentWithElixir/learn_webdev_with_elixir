@@ -43,7 +43,9 @@ defmodule LearnWebdevWithElixir.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:timex, "~> 3.6"}
+      {:timex, "~> 3.6"},
+      {:stein, "~> 0.5"},
+      {:stein_phoenix, "~> 0.2.1"}
     ]
   end
 

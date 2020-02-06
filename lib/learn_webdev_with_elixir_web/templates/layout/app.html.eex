@@ -15,6 +15,12 @@
           <a class="nav-link active" href="/">Home</a>
           <a class="nav-link" href="#">About</a>
           <a class="nav-link" href="#">Contact Us</a>
+          <%= if Map.has_key?(assigns, :current_user) do %>
+            <%= link("Sign Out", to: Routes.session_path(@conn, :delete), method: :delete, class: "nav-link") %>
+          <% else %>
+              <%= link("Register", to: Routes.registration_path(@conn, :new), class: "nav-link") %>
+              <%= link("Sign In", to: Routes.session_path(@conn, :new), class: "nav-link") %>
+          <% end %>
         </nav>
       </div>
     </div>

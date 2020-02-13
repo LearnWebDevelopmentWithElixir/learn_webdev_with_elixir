@@ -135,13 +135,13 @@ h6, .h6 {
   border-radius: 2rem;
 }
 
-
 /*
  * Blog posts
  */
 
 .blog-post {
-  margin-bottom: 4rem;
+    margin-bottom: 4rem;
+    padding: 2em;
 }
 .blog-post-title {
   margin-bottom: .25rem;
@@ -152,6 +152,11 @@ h6, .h6 {
   color: #999;
 }
 
+.blog-post pre  {
+    margin: 18px 0;
+    background-color:#f8f9fc;
+    padding: 15px;
+}
 
 /*
  * Footer
@@ -166,4 +171,15 @@ h6, .h6 {
 }
 .blog-footer p:last-child {
   margin-bottom: 0;
+}
+
+
+/*
+* Comments
+*/
+
+.comment {
+    margin: 18px 0;
+    border: 1px solid #eee;
+    padding: 15px;
 }

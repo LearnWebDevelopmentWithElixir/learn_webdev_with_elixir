@@ -45,7 +45,10 @@ defmodule LearnWebdevWithElixir.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:timex, "~> 3.6"},
       {:stein, "~> 0.5"},
-      {:stein_phoenix, "~> 0.2.1"}
+      {:stein_phoenix, "~> 0.2.1"},
+      {:earmark, "~> 1.3"},
+      {:makeup_elixir, "~> 0.14"},
+      {:ex_doc, "~> 0.21.3"}
     ]
   end
 

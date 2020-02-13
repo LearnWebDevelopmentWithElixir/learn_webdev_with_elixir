@@ -7,7 +7,8 @@
   },
   "dependencies": {
     "phoenix": "file:../deps/phoenix",
-    "phoenix_html": "file:../deps/phoenix_html"
+    "phoenix_html": "file:../deps/phoenix_html",
+    "prismjs": "^1.19.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -16,6 +17,7 @@
     "bootstrap": "^4.4.1",
     "copy-webpack-plugin": "^4.5.0",
     "css-loader": "^2.1.1",
+    "file-loader": "^5.0.2",
     "jquery": "^3.4.1",
     "mini-css-extract-plugin": "^0.4.0",
     "node-sass": "^4.13.1",
@@ -23,6 +25,7 @@
     "popper.js": "^1.16.1",
     "sass-loader": "^7.3.1",
     "uglifyjs-webpack-plugin": "^1.2.4",
+    "url-loader": "^3.0.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.1.1"
   }

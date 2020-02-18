@@ -1,7 +1,10 @@
 <div class="blog-post shadow rounded">
   <h2 class="blog-post-title"><%= @post.title %></h2>
   <p class="blog-post-meta"><%= list_date_format @post.inserted_at %> by <a href="#"><%=  user_name @post %></a></p>
-  <%= raw(@post.body |> Earmark.as_html!() |> ExDoc.Highlighter.highlight_code_blocks()) %>
+  <%= raw(@post.body |> Earmark.as_html!(%Earmark.Options{
+      code_class_prefix: "language-",
+      smartypants: false
+  })) %>
 </div>
 
 
@@ -9,7 +12,7 @@
 
 <div>
   <%= for comment <- @post.comments do%>
-    <p><div class="comment rounded"><%= comment.body %> <small>by <%=  user_name comment %></small></div></p>
+    <p><div class="blog_comment rounded"><%= comment.body %> <small>by <%=  user_name comment %></small></div></p>
   <% end %>
 </div>
 

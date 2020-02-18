@@ -41,7 +41,6 @@ defmodule LearnWebdevWithElixirWeb do
 
       import LearnWebdevWithElixirWeb.ErrorHelpers
       import LearnWebdevWithElixirWeb.Gettext
-      import ExDoc.Highlighter
       alias LearnWebdevWithElixirWeb.Router.Helpers, as: Routes
     end
   end

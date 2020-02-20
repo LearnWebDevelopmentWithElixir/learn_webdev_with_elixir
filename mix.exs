@@ -20,7 +20,7 @@ defmodule LearnWebdevWithElixir.MixProject do
   def application do
     [
       mod: {LearnWebdevWithElixir.Application, [:timex]},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :recaptcha]
     ]
   end
 
@@ -48,7 +48,9 @@ defmodule LearnWebdevWithElixir.MixProject do
       {:stein_phoenix, "~> 0.2.1"},
       {:earmark, "~> 1.3"},
       {:makeup_elixir, "~> 0.14"},
-      {:ex_doc, "~> 0.21.3"}
+      {:ex_doc, "~> 0.21.3"},
+      {:recaptcha, "~> 3.0"},
+      {:poison, "~> 3.1.0"}
     ]
   end
 

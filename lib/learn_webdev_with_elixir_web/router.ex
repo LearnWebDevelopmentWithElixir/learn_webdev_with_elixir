@@ -31,6 +31,8 @@ defmodule LearnWebdevWithElixirWeb.Router do
     get("/sign-in", SessionController, :new)
     post("/sign-in", SessionController, :create)
     delete("/sign-out", SessionController, :delete)
+
+    post("/subscribe", SubscribersController, :create)
   end
 
   scope "/", LearnWebdevWithElixirWeb do

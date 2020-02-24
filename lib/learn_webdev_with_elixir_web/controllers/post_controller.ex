@@ -3,23 +3,19 @@ defmodule LearnWebdevWithElixirWeb.PostController do
 
   alias LearnWebdevWithElixir.Content
   alias LearnWebdevWithElixir.Content.{Post, Post.Comment}
-  alias LearnWebdevWithElixir.Subscribers
-  alias LearnWebdevWithElixir.Subscribers.{Email}
 
   def list(conn, _params) do
     posts = Content.list_posts()
-    changeset = Subscribers.change_email(%Email{})
 
     conn
-    |> render("list.html", posts: posts, changeset: changeset)
+    |> render("list.html", posts: posts)
   end
 
   def index(conn, _params) do
     posts = Content.list_posts()
-    changeset = Subscribers.change_email(%Email{})
 
     conn
-    |> render("index.html", posts: posts, changeset: changeset)
+    |> render("index.html", posts: posts)
   end
 
   def new(conn, _params) do
@@ -46,7 +42,12 @@ defmodule LearnWebdevWithElixirWeb.PostController do
     post = Content.get_post!(id)
     posts = Content.list_posts()
     comment_changeset = Content.change_comment(%Comment{})
-    render(conn, "show.html", post: post, posts: posts, comment_changeset: comment_changeset)
+
+    render(conn, "show.html",
+      post: post,
+      posts: posts,
+      comment_changeset: comment_changeset
+    )
   end
 
   def edit(conn, %{"id" => id}) do

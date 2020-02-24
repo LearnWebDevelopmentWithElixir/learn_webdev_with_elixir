@@ -13,18 +13,18 @@ defmodule LearnWebdevWithElixirWeb.SubscribersController do
         case Subscribers.create(email) do
           {:ok, subscriber} ->
             conn
-            |> put_flash(:info, "Post created successfully.")
+            |> put_flash(:subscription_success, "Your subscription has been successful.")
             |> redirect(to: Routes.post_path(conn, :list))
 
           {:error, changeset} ->
             conn
-            |> put_flash(:error, "Post created successfully.")
+            |> put_flash(:subscription_failed, "There was an error, please try again.")
             |> redirect(to: Routes.post_path(conn, :list))
         end
 
       {:error, errors} ->
         conn
-        |> put_flash(:error, "There was an error, please try again")
+        |> put_flash(:subscription_failed, "There was an error, please try again")
         |> redirect(to: Routes.post_path(conn, :list))
     end
   end

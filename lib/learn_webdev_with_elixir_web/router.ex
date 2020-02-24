@@ -8,6 +8,7 @@ defmodule LearnWebdevWithElixirWeb.Router do
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
     plug LearnWebdevWithElixirWeb.Plugs.FetchUser
+    plug LearnWebdevWithElixirWeb.Plugs.EmailChangeset
   end
 
   pipeline :logged_in do

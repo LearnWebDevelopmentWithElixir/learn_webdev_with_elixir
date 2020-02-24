@@ -45,26 +45,33 @@
               <% end  %>
             </ul>
 
-            <div>
+            <div class="subscribe">
               Subscribe to Learn Web Development with Elixir updates <br />
               Add your e-mail below to receive e-mails with Learn Web Dev with Elixir Updates.
 
-              <%= form_for @changeset, "/subscribe/", fn f -> %>
-                <%= if @changeset.action do %>
+              <%= form_for @email_changeset, "/subscribe/", fn f -> %>
+                <%= if @email_changeset.action do %>
                   <div class="alert alert-danger">
                     <p>Oops, something went wrong! Please check the errors below.</p>
                   </div>
                 <% end %>
 
+                <%= if get_flash(@conn, :subscription_success) do %>
+                  <p class="alert alert-info" role="alert"><%= get_flash(@conn, :subscription_success) %></p>
+                <% end %>
+                <%= if get_flash(@conn, :subscription_failed) do %>
+                  <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :subscription_failed) %></p>
+                <% end %>
+
                 <%= label f, :email %>
-                <%= email_input f, :email, placeholder: "Email" %>
+                <%= email_input f, :email, placeholder: "Email",  class: "form-control"  %>
 
                 <%= error_tag f, :email %>
 
                 <%= raw Recaptcha.Template.display() %>
 
                 <div>
-                  <%= submit "Submit", class: "btn-secondary"  %>
+                  <%= submit "Subscribe", class: "btn-primary"  %>
                 </div>
               <% end %>
 
@@ -75,10 +82,10 @@
 
         <div class="col-sm-8">
           <main role="main" class="container">
-            <% if get_flash(@conn, :info) do %>
+            <%= if get_flash(@conn, :info) do %>
               <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
             <% end %>
-            <% if get_flash(@conn, :error) do %>
+            <%= if get_flash(@conn, :error) do %>
               <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
             <% end %>
             <%= render @view_module, @view_template, assigns %>

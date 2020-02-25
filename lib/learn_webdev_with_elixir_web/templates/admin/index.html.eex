@@ -1,0 +1,25 @@
+<div style="border: 1px solid #eee;padding:30px;" class="posts">
+  <h3>Posts</h3>
+
+  <%= link "Edit posts", to: Routes.post_path(@conn, :index) %>
+</div>
+
+<div style="margin-top:30px;">
+</div>
+
+
+<div style="border: 1px solid #eee;padding:30px;" class="pages">
+  <h3>Pages</h3>
+
+  <%= link "Edit pages", to: Routes.page_path(@conn, :index) %>
+</div>
+
+<div style="margin-top:30px;">
+</div>
+
+
+<div style="border: 1px solid #eee;padding:30px;" class="posts">
+  <h3>Users</h3>
+
+  <%= link "Edit users", to: Routes.user_path(@conn, :index) %>
+</div>

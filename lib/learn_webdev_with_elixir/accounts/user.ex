@@ -12,6 +12,7 @@ defmodule LearnWebdevWithElixir.Accounts.User do
     field :password_confirmation, :string, virtual: true
     field :password_hash, :string
     field :token, :string
+    field :permissions, {:array, :string}
 
     field(:email_verification_token, Ecto.UUID)
     field(:email_verified_at, :utc_datetime)
@@ -37,7 +38,7 @@ defmodule LearnWebdevWithElixir.Accounts.User do
 
   def update_changeset(struct, params) do
     struct
-    |> cast(params, [:email, :first_name, :last_name])
+    |> cast(params, [:email, :first_name, :last_name, :permissions])
     |> validate_required([:email, :first_name, :last_name])
     |> unique_constraint(:email, name: :users_lower_email_index)
   end

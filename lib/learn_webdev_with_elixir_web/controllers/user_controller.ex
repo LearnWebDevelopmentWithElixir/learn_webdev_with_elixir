@@ -2,16 +2,10 @@ defmodule LearnWebdevWithElixirWeb.UserController do
   use LearnWebdevWithElixirWeb, :controller
 
   alias LearnWebdevWithElixir.Accounts
-  alias LearnWebdevWithElixir.Accounts.User
 
   def index(conn, _params) do
     users = Accounts.list_users()
     render(conn, "index.html", users: users)
-  end
-
-  def new(conn, _params) do
-    changeset = Accounts.change_user(%User{})
-    render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"user" => user_params}) do

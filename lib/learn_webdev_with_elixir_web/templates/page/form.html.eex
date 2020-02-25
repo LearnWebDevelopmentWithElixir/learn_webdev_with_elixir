@@ -6,14 +6,19 @@
   <% end %>
 
   <%= label f, :title %>
-  <%= text_input f, :title %>
+  <%= text_input f, :title,  class: "form-control" %>
   <%= error_tag f, :title %>
 
   <%= label f, :body %>
-  <%= textarea f, :body %>
+  <%= textarea f, :body, class: "form-control",  id: "body-editor" %>
   <%= error_tag f, :body %>
 
   <div>
-    <%= submit "Save" %>
+    <%= submit "Save", class: "btn-primary" %>
   </div>
 <% end %>
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<script src="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script>var simplemde = new SimpleMDE();</script>

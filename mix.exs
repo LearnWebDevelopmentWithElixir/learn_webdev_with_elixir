@@ -50,7 +50,8 @@ defmodule LearnWebdevWithElixir.MixProject do
       {:makeup_elixir, "~> 0.14"},
       {:ex_doc, "~> 0.21.3"},
       {:recaptcha, "~> 3.0"},
-      {:poison, "~> 3.1.0"}
+      {:poison, "~> 3.1.0"},
+      {:policy_wonk, "~> 1.0"}
     ]
   end
 

@@ -98,6 +98,8 @@ defmodule LearnWebdevWithElixir.Accounts do
 
   """
   def update_user(%User{} = user, attrs) do
+    attrs = Map.put(attrs, "permissions", [attrs["permissions"]])
+
     user
     |> User.update_changeset(attrs)
     |> Repo.update()

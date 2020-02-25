@@ -5,11 +5,19 @@
     </div>
   <% end %>
 
-  <%= label f, :name %>
-  <%= text_input f, :name %>
-  <%= error_tag f, :name %>
+  <%= label f, :first_name %>
+  <%= text_input f, :first_name,  class: "form-control" %>
+  <%= error_tag f, :first_name %>
+
+  <%= label f, :last_name %>
+  <%= text_input f, :last_name,  class: "form-control" %>
+  <%= error_tag f, :last_name %>
+
+  <%= label f, :permissions %>
+  <%= text_input f, :permissions,  class: "form-control" %>
+  <%= error_tag f, :permissions %>
 
   <div>
-    <%= submit "Save" %>
+    <%= submit "Save", class: "btn-primary" %>
   </div>
 <% end %>

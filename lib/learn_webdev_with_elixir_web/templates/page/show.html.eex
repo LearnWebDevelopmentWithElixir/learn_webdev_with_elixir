@@ -1,1 +1,4 @@
-<%= @page.body %>
+<%= raw(@page.body |> Earmark.as_html!(%Earmark.Options{
+    code_class_prefix: "language-",
+    smartypants: false
+})) %>

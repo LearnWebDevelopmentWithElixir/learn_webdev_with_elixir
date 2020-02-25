@@ -15,17 +15,38 @@ defmodule LearnWebdevWithElixirWeb.Router do
     plug LearnWebdevWithElixirWeb.Plugs.EnsureUser
   end
 
+  pipeline :admin do
+    plug LearnWebdevWithElixir.Policies, {:admin_permission, "admin"}
+  end
+
+  # pipeline :admin do
+  #   plug LearnWebdevWithElixirWeb.Policies, {:admin_permission, "dashboard"}
+  # end
+
   pipeline :api do
     plug(:accepts, ["json"])
   end
 
   scope "/", LearnWebdevWithElixirWeb do
+    pipe_through([:browser, :logged_in, :admin])
+
+    get("/admin", AdminController, :index)
+    resources "/pages", PageController, only: [:new, :index, :create, :edit, :update, :delete]
+    resources "/users", UserController, only: [:index, :show, :create, :edit, :update, :delete]
+
+    resources("/posts", PostController, only: [:new, :index, :create, :edit, :update, :delete])
+  end
+
+  scope "/", LearnWebdevWithElixirWeb do
     pipe_through(:browser)
 
-    resources("/users", UserController)
-    resources("/pages", PageController)
+    resources "/pages", PageController, only: [:show]
 
     get("/", PostController, :list)
+
+    resources("/posts", PostController, except: [:new, :index, :create, :edit, :update, :delete]) do
+      resources("/comments", CommentController)
+    end
 
     get("/register", RegistrationController, :new)
     post("/register", RegistrationController, :create)
@@ -35,15 +56,6 @@ defmodule LearnWebdevWithElixirWeb.Router do
     delete("/sign-out", SessionController, :delete)
 
     post("/subscribe", SubscribersController, :create)
-  end
-
-  scope "/", LearnWebdevWithElixirWeb do
-    pipe_through([:browser, :logged_in])
-
-    resources("/posts", PostController) do
-      resources("/comments", CommentController)
-      get("/list", PostController, :list)
-    end
   end
 
   # Other scopes may use custom stacks.

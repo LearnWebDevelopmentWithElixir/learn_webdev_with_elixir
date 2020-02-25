@@ -20,14 +20,6 @@ defmodule LearnWebdevWithElixirWeb.UserControllerTest do
     end
   end
 
-  describe "new user" do
-    @tag :skip
-    test "renders form", %{conn: conn} do
-      conn = get(conn, Routes.user_path(conn, :new))
-      assert html_response(conn, 200) =~ "New User"
-    end
-  end
-
   describe "create user" do
     @tag :skip
     test "redirects to show when data is valid", %{conn: conn} do

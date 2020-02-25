@@ -13,7 +13,7 @@
 <%= for page <- @pages do %>
     <tr>
       <td><%= page.title %></td>
-      <td><%= page.body %></td>
+      <td><%= page.body |> String.slice(0, 15) |> String.trim_trailing %>...    </td>
 
       <td>
         <span><%= link "Show", to: Routes.page_path(@conn, :show, page) %></span>

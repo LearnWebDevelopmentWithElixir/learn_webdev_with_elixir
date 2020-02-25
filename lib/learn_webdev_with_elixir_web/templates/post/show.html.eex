@@ -7,6 +7,22 @@
   })) %>
 </div>
 
+<div class="related_posts" >
+  Other posts
+  <div class="container" >
+    <div class="row" style="width:100%;">
+      <% remaining_posts = Enum.reject(@posts, fn post -> post.id == @post.id end) %>
+      <%= if !Enum.empty?(remaining_posts) do %>
+      <div class="col-6" >
+        <%= link List.first(remaining_posts).title, to: Routes.post_path(@conn, :show, List.first(remaining_posts)) %>
+      </div>
+      <div class="col-6">
+        <%= link List.last(remaining_posts).title, to: Routes.post_path(@conn, :show, List.first(remaining_posts)) %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
 
 <h5>Comments</h5>
 

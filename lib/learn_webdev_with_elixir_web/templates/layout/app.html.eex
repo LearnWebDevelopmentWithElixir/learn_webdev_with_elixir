@@ -12,9 +12,10 @@
     <div class="blog-masthead">
       <div class="container">
         <nav class="nav blog-nav">
-          <a class="nav-link active" href="/">Home</a>
-          <a class="nav-link" href="#">About</a>
-          <a class="nav-link" href="#">Contact Us</a>
+          <a class="nav-link" href="/">Home</a>
+          <%= for page <- @pages do %>
+            <span><%= link page.title, to: Routes.page_path(@conn, :show, page), class: "nav-link" %></span>
+            <% end %>
           <%= if Map.has_key?(assigns, :current_user) do %>
             <%= link("Sign Out", to: Routes.session_path(@conn, :delete), method: :delete, class: "nav-link") %>
           <% else %>

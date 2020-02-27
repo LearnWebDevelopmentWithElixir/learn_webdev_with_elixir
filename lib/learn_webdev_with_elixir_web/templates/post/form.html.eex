@@ -26,4 +26,9 @@
 
 <link rel="stylesheet" href="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 <script src="//cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-<script>var simplemde = new SimpleMDE();</script>
+<script>
+ var simplemde = new SimpleMDE({
+     indentWithTabs: false,
+     tabSize: 2
+ });
+</script>

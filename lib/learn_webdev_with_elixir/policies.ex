@@ -1,28 +1,23 @@
 defmodule LearnWebdevWithElixir.Policies do
   # turn this module into an enforcement plug
   use PolicyWonk.Enforce
+  alias LearnWebdevWithElixir.Accounts.User
 
+
+  @doc """
+    Check admin permissions for a logged in user
+  """
   def policy(assigns, {:admin_permission, perms}) when is_list(perms) do
-    case assigns[:current_user] do
-      nil ->
-        :current_user
-
-      user ->
-        case user.permissions do
-          # Fail. No permissions
-          nil ->
-            {:error, :admin_permission}
-
-          user_perms ->
-            Enum.all?(perms, &Enum.member?(user_perms, to_string(&1)))
-            |> case do
-              # Success.
-              true -> :ok
-              # Fail. Permission missing
-              false -> {:error, :admin_permission}
-            end
-        end
-    end
+    with %User{} = user <- assigns[:current_user],
+          [_|_] = user_perms <- user.permissions,
+          true <- Enum.all?(perms, &Enum.member?(user_perms, to_string(&1))) do
+          :ok
+    else
+        nil -> 
+          {:error, :admin_permission}
+        false -> 
+          {:error, :admin_permission}
+    end  
   end
 
   def policy(assigns, {:admin_permission, one_perm}),

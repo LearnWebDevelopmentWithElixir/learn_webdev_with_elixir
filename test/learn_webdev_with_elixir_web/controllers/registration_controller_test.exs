@@ -1,31 +1,19 @@
 defmodule LearnWebdevWithElixirWeb.RegistrationControllerTest do
   use LearnWebdevWithElixirWeb.ConnCase
+  use LearnWebdevWithElixir.FixtureParams
 
   describe "registering a new user" do
+    @tag run: true
     test "successful", %{conn: conn} do
-      params = %{
-        email: "user@example.com",
-        first_name: "John",
-        last_name: "Smith",
-        password: "password",
-        password_confirmation: "password"
-      }
+      conn = post(conn, Routes.registration_path(conn, :create), user: @valid_user_attrs)
 
-      conn = post(conn, Routes.registration_path(conn, :create), user: params)
-
-      assert redirected_to(conn) == Routes.page_path(conn, :index)
+      assert redirected_to(conn) == Routes.post_path(conn, :list)
     end
 
-    test "failure", %{conn: conn} do
-      params = %{
-        email: "user@example.com",
-        first_name: "John",
-        last_name: "Smith",
-        password: "password",
-        password_confirmation: "passw0rd"
-      }
+    @tag run: true
+    test "failure", %{conn: conn} do      
 
-      conn = post(conn, Routes.registration_path(conn, :create), user: params)
+      conn = post(conn, Routes.registration_path(conn, :create), user: @invalid_user_attrs)
 
       assert html_response(conn, 422)
     end

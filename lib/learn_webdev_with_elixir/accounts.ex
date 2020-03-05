@@ -69,18 +69,6 @@ defmodule LearnWebdevWithElixir.Accounts do
     |> Repo.insert()
   end
 
-  def update(user, params) do
-    changeset = User.update_changeset(user, params)
-
-    case Repo.update(changeset) do
-      {:ok, user} ->
-        {:ok, user}
-
-      {:error, changeset} ->
-        {:error, changeset}
-    end
-  end
-
   def validate_login(email, password) do
     Accounts.validate_login(Repo, User, email, password)
   end
@@ -98,7 +86,7 @@ defmodule LearnWebdevWithElixir.Accounts do
 
   """
   def update_user(%User{} = user, attrs) do
-    attrs = Map.put(attrs, "permissions", [attrs["permissions"]])
+    attrs = Map.put(attrs, :permissions, [attrs["permissions"]])
 
     user
     |> User.update_changeset(attrs)

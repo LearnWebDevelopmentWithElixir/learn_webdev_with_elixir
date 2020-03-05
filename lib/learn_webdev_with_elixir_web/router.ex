@@ -49,6 +49,7 @@ defmodule LearnWebdevWithElixirWeb.Router do
     get("/", PostController, :list)
 
     resources("/posts", PostController, except: [:new, :index, :create, :edit, :update, :delete]) do
+      pipe_through(:logged_in)
       resources("/comments", CommentController)
     end
 

@@ -13,5 +13,6 @@ defmodule LearnWebdevWithElixir.Subscribers.Email do
     email
     |> cast(attrs, [:email])
     |> validate_required([:email])
+    |> unique_constraint(:email, name: :emails_email_index)
   end
 end

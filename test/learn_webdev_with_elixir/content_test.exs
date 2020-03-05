@@ -4,192 +4,168 @@ defmodule LearnWebdevWithElixir.ContentTest do
   alias LearnWebdevWithElixir.Content
 
   describe "posts" do
+    use LearnWebdevWithElixir.FixtureParams
     alias LearnWebdevWithElixir.Content.Post
+    alias LearnWebdevWithElixir.{Content, Fixture}
 
-    @valid_attrs %{body: "some body", title: "some title"}
-    @update_attrs %{body: "some updated body", title: "some updated title"}
-    @invalid_attrs %{body: nil, title: nil}
-
-    def post_fixture(attrs \\ %{}) do
-      {:ok, post} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Content.create_post()
-
-      post
-    end
-
+    @tag run: true
     test "list_posts/0 returns all posts" do
-      post = post_fixture()
-      assert Content.list_posts() == [post]
+      {:ok, %Post{} = _post} = Fixture.post_fixture(@valid_post_attrs)
+      assert is_list(Content.list_posts())
     end
 
-    @tag :skip
+    @tag run: true
     test "get_post!/1 returns the post with given id" do
-      post = post_fixture()
-      assert Content.get_post!(post.id) == post
+      {:ok, post} = Fixture.post_fixture()
+      assert Content.get_post!(post.id).id == post.id
     end
 
+    @tag run: true
     test "create_post/1 with valid data creates a post" do
-      assert {:ok, %Post{} = post} = Content.create_post(@valid_attrs)
-      assert post.body == "some body"
-      assert post.title == "some title"
+      assert {:ok, %Post{} = post} = Fixture.post_fixture(@valid_post_attrs)
+      assert post.body == @valid_post_attrs.body
+      assert post.title == @valid_post_attrs.title
     end
 
+    @tag run: true
     test "create_post/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Content.create_post(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Fixture.post_fixture(@invalid_post_attrs)
     end
 
+    @tag run: true
     test "update_post/2 with valid data updates the post" do
-      post = post_fixture()
-      assert {:ok, %Post{} = post} = Content.update_post(post, @update_attrs)
-      assert post.body == "some updated body"
-      assert post.title == "some updated title"
+      {:ok,post} = Fixture.post_fixture(@valid_post_attrs)
+      assert {:ok, %Post{} = post} = Content.update_post(post, @update_post_attrs)
+      assert post.body == @update_post_attrs.body
+      assert post.title == @update_post_attrs.title
     end
 
-    @tag :skip
+    @tag run: true
     test "update_post/2 with invalid data returns error changeset" do
-      post = post_fixture()
-      assert {:error, %Ecto.Changeset{}} = Content.update_post(post, @invalid_attrs)
-      assert post == Content.get_post!(post.id)
+      {:ok, post} = Fixture.post_fixture()
+      assert {:error, %Ecto.Changeset{}} = Content.update_post(post, @invalid_post_attrs)
     end
 
+    @tag run: true
     test "delete_post/1 deletes the post" do
-      post = post_fixture()
+      {:ok, post} = Fixture.post_fixture()
       assert {:ok, %Post{}} = Content.delete_post(post)
       assert_raise Ecto.NoResultsError, fn -> Content.get_post!(post.id) end
     end
 
+    @tag run: true
     test "change_post/1 returns a post changeset" do
-      post = post_fixture()
+      {:ok, post} = Fixture.post_fixture(@valid_post_attrs)
       assert %Ecto.Changeset{} = Content.change_post(post)
     end
   end
 
   describe "comments" do
+    use LearnWebdevWithElixir.FixtureParams
     alias LearnWebdevWithElixir.Content.Post.Comment
-
-    @valid_attrs %{body: "some body"}
-    @update_attrs %{body: "some updated body"}
-    @invalid_attrs %{body: nil}
-
-    def comment_fixture(attrs \\ %{}) do
-      {:ok, comment} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Content.create_comment()
-
-      comment
-    end
-
-    @tag :skip
+    alias LearnWebdevWithElixir.{Content, Fixture}
+    
+    @tag run: true
     test "list_comments/0 returns all comments" do
-      comment = comment_fixture()
-      assert Content.list_comments() == [comment]
+      assert is_list(Content.list_comments())
     end
 
-    @tag :skip
+    @tag run: true
     test "get_comment!/1 returns the comment with given id" do
-      comment = comment_fixture()
+      {:ok, comment} = Fixture.comment_fixture(@valid_comment_attrs)
       assert Content.get_comment!(comment.id) == comment
     end
 
-    @tag :skip
+    @tag run: true
     test "create_comment/1 with valid data creates a comment" do
-      assert {:ok, %Comment{} = comment} = Content.create_comment(@valid_attrs)
-      assert comment.body == "some body"
+      assert {:ok, %Comment{} = comment} = Fixture.comment_fixture(@valid_comment_attrs)
+      assert comment.body == @valid_comment_attrs.body
     end
 
-    @tag :skip
+    @tag run: true
     test "create_comment/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Content.create_comment(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Fixture.comment_fixture(@invalid_comment_attrs)
     end
 
-    @tag :skip
+    @tag run: true
     test "update_comment/2 with valid data updates the comment" do
-      comment = comment_fixture()
-      assert {:ok, %Comment{} = comment} = Content.update_comment(comment, @update_attrs)
-      assert comment.body == "some updated body"
+      {:ok, comment} = Fixture.comment_fixture(@valid_comment_attrs)
+      assert {:ok, %Comment{} = comment} = Content.update_comment(comment, @update_comment_attrs)
+      assert comment.body == @update_comment_attrs.body
     end
 
-    @tag :skip
+    @tag run: true
     test "update_comment/2 with invalid data returns error changeset" do
-      comment = comment_fixture()
-      assert {:error, %Ecto.Changeset{}} = Content.update_comment(comment, @invalid_attrs)
-      assert comment == Content.get_comment!(comment.id)
+      {:ok, comment} = Fixture.comment_fixture(@valid_comment_attrs)
+      assert {:error, %Ecto.Changeset{}} = Content.update_comment(comment, @invalid_comment_attrs)
     end
 
-    @tag :skip
+    @tag run: true
     test "delete_comment/1 deletes the comment" do
-      comment = comment_fixture()
+      {:ok, comment} = Fixture.comment_fixture(@valid_comment_attrs)
       assert {:ok, %Comment{}} = Content.delete_comment(comment)
       assert_raise Ecto.NoResultsError, fn -> Content.get_comment!(comment.id) end
     end
 
-    @tag :skip
+    @tag run: true
     test "change_comment/1 returns a comment changeset" do
-      comment = comment_fixture()
+      {:ok, comment} = Fixture.comment_fixture(@valid_comment_attrs)
       assert %Ecto.Changeset{} = Content.change_comment(comment)
     end
   end
 
   describe "pages" do
+    use LearnWebdevWithElixir.FixtureParams
     alias LearnWebdevWithElixir.Content.Page
+    alias LearnWebdevWithElixir.{Content, Fixture}
 
-    @valid_attrs %{body: "some body", title: "some title"}
-    @update_attrs %{body: "some updated body", title: "some updated title"}
-    @invalid_attrs %{body: nil, title: nil}
-
-    def page_fixture(attrs \\ %{}) do
-      {:ok, page} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Content.create_page()
-
-      page
-    end
-
+    @tag run: true
     test "list_pages/0 returns all pages" do
-      page = page_fixture()
-      assert Content.list_pages() == [page]
+      assert is_list(Content.list_pages())
     end
 
+    @tag run: true
     test "get_page!/1 returns the page with given id" do
-      page = page_fixture()
-      assert Content.get_page!(page.id) == page
+      {:ok, page} = Fixture.page_fixture(@valid_page_attrs)
+      assert Content.get_page!(page.id).id == page.id
     end
 
+    @tag run: true
     test "create_page/1 with valid data creates a page" do
-      assert {:ok, %Page{} = page} = Content.create_page(@valid_attrs)
-      assert page.body == "some body"
-      assert page.title == "some title"
+      assert {:ok, %Page{} = page} = Content.create_page(@valid_page_attrs)
+      assert page.body == @valid_page_attrs.body
+      assert page.title == @valid_page_attrs.title
     end
 
+    @tag run: true
     test "create_page/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Content.create_page(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Content.create_page(@invalid_page_attrs)
     end
 
+    @tag run: true
     test "update_page/2 with valid data updates the page" do
-      page = page_fixture()
-      assert {:ok, %Page{} = page} = Content.update_page(page, @update_attrs)
-      assert page.body == "some updated body"
-      assert page.title == "some updated title"
+      {:ok, page} = Fixture.page_fixture(@valid_page_attrs)
+      assert {:ok, %Page{} = page} = Content.update_page(page, @update_page_attrs)
+      assert page.body == @update_page_attrs.body
+      assert page.title == @update_page_attrs.title
     end
 
+    @tag run: true
     test "update_page/2 with invalid data returns error changeset" do
-      page = page_fixture()
-      assert {:error, %Ecto.Changeset{}} = Content.update_page(page, @invalid_attrs)
-      assert page == Content.get_page!(page.id)
+      {:ok, page} = Fixture.page_fixture(@valid_page_attrs)
+      assert {:error, %Ecto.Changeset{}} = Content.update_page(page, @invalid_page_attrs)
     end
 
+    @tag run: true
     test "delete_page/1 deletes the page" do
-      page = page_fixture()
+      {:ok, page} = Fixture.page_fixture(@valid_page_attrs)
       assert {:ok, %Page{}} = Content.delete_page(page)
       assert_raise Ecto.NoResultsError, fn -> Content.get_page!(page.id) end
     end
 
+    @tag run: true
     test "change_page/1 returns a page changeset" do
-      page = page_fixture()
+      {:ok, page} = Fixture.page_fixture(@valid_page_attrs)
       assert %Ecto.Changeset{} = Content.change_page(page)
     end
   end

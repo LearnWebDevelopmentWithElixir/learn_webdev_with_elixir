@@ -28,12 +28,20 @@ defmodule LearnWebdevWithElixir.Content do
       |> Repo.all()
       |> Repo.preload(:user)
 
+    get_sorted_posts(posts)
+  end
+
+  defp get_sorted_posts(posts) do
     posts_order = Repo.one(PostsOrder)
 
     sorted_posts =
-      Enum.map(String.split(posts_order.order, ","), fn r ->
-        Enum.find(posts, fn p -> String.to_integer(r) == p.id end)
-      end)
+      if posts_order do
+        Enum.map(String.split(posts_order.order, ","), fn r ->
+          Enum.find(posts, fn p -> String.to_integer(r) == p.id end)
+        end)
+      else
+        []
+      end
 
     Enum.uniq(sorted_posts ++ posts)
   end
@@ -166,9 +174,9 @@ defmodule LearnWebdevWithElixir.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_comment(%Post{} = post, attrs \\ %{}) do
-    post
-    |> Ecto.build_assoc(:comments, user_id: post.user_id)
+  def create_comment(%Post{} = post, %User{} = user,attrs \\ %{}) do
+    user
+    |> Ecto.build_assoc(:comments, post_id: post.id)
     |> Comment.changeset(attrs)
     |> Repo.insert()
   end

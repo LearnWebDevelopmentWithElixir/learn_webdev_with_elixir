@@ -3,12 +3,13 @@ defmodule LearnWebdevWithElixir.Accounts.User do
   import Ecto.Changeset
 
   alias LearnWebdevWithElixir.Content.Post
+  alias LearnWebdevWithElixir.Content.Post.Comment
 
   schema "users" do
     field :email, :string
     field :first_name, :string
     field :last_name, :string
-    field :password, :string
+    field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
     field :password_hash, :string
     field :token, :string
@@ -21,6 +22,7 @@ defmodule LearnWebdevWithElixir.Accounts.User do
     field(:password_reset_expires_at, :utc_datetime)
 
     has_many :posts, Post
+    has_many :comments, Comment
 
     timestamps()
   end
@@ -33,13 +35,13 @@ defmodule LearnWebdevWithElixir.Accounts.User do
     |> Stein.Accounts.hash_password()
     |> Stein.Accounts.start_email_verification_changeset()
     |> validate_required([:email, :first_name, :last_name, :password_hash])
-    |> unique_constraint(:email, name: :users_lower_email_index)
+    |> unique_constraint(:email, name: :users_email_index)
   end
 
   def update_changeset(struct, params) do
     struct
     |> cast(params, [:email, :first_name, :last_name, :permissions])
     |> validate_required([:email, :first_name, :last_name])
-    |> unique_constraint(:email, name: :users_lower_email_index)
+    |> unique_constraint(:email, name: :users_email_index)
   end
 end

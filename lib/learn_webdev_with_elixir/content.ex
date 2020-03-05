@@ -30,9 +30,12 @@ defmodule LearnWebdevWithElixir.Content do
 
     posts_order = Repo.one(PostsOrder)
 
-    Enum.map(String.split(posts_order.order, ","), fn r ->
-      Enum.find(posts, fn p -> String.to_integer(r) == p.id end)
-    end)
+    sorted_posts =
+      Enum.map(String.split(posts_order.order, ","), fn r ->
+        Enum.find(posts, fn p -> String.to_integer(r) == p.id end)
+      end)
+
+    Enum.uniq(sorted_posts ++ posts)
   end
 
   @doc """

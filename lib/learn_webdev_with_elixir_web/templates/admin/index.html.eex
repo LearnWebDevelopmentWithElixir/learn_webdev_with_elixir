@@ -1,7 +1,13 @@
 <div style="border: 1px solid #eee;padding:30px;" class="posts">
   <h3>Posts</h3>
 
-  <%= link "Edit posts", to: Routes.post_path(@conn, :index) %>
+  <div>
+    <%= link "Edit posts", to: Routes.post_path(@conn, :index) %>
+  </div>
+
+  <div>
+    <%= link "Sort posts", to: Routes.post_path(@conn, :sort_posts) %>
+  </div>
 </div>
 
 <div style="margin-top:30px;">

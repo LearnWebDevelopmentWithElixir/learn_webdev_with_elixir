@@ -14,6 +14,11 @@ defmodule LearnWebdevWithElixirWeb.PostController do
     |> render("index.html")
   end
 
+  def sort_posts(conn, _params) do
+    conn
+    |> render("sort_posts.html")
+  end
+
   def new(conn, _params) do
     changeset = Content.change_post(%Post{})
     render(conn, "new.html", changeset: changeset)
@@ -70,5 +75,10 @@ defmodule LearnWebdevWithElixirWeb.PostController do
     conn
     |> put_flash(:info, "Post deleted successfully.")
     |> redirect(to: Routes.post_path(conn, :index))
+  end
+
+  def save_posts_order(conn, params) do
+    Content.save_posts_order(params)
+    text(conn, "done")
   end
 end

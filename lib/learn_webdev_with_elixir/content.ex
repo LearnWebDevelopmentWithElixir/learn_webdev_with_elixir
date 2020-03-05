@@ -1,4 +1,6 @@
 defmodule LearnWebdevWithElixir.Content do
+  alias LearnWebdevWithElixir.Content.PostsOrder
+
   @moduledoc """
   The Content context.
   """
@@ -7,6 +9,7 @@ defmodule LearnWebdevWithElixir.Content do
   alias LearnWebdevWithElixir.Repo
 
   alias LearnWebdevWithElixir.Content.Post
+  alias LearnWebdevWithElixir.Content.PostsOrder
   alias LearnWebdevWithElixir.Content.Post.Comment
   alias LearnWebdevWithElixir.Accounts.User
 
@@ -20,9 +23,16 @@ defmodule LearnWebdevWithElixir.Content do
 
   """
   def list_posts do
-    Post
-    |> Repo.all()
-    |> Repo.preload(:user)
+    posts =
+      Post
+      |> Repo.all()
+      |> Repo.preload(:user)
+
+    posts_order = Repo.one(PostsOrder)
+
+    Enum.map(String.split(posts_order.order, ","), fn r ->
+      Enum.find(posts, fn p -> String.to_integer(r) == p.id end)
+    end)
   end
 
   @doc """
@@ -301,5 +311,13 @@ defmodule LearnWebdevWithElixir.Content do
   """
   def change_page(%Page{} = page) do
     Page.changeset(page, %{})
+  end
+
+  def save_posts_order(attrs \\ %{}) do
+    case Repo.one(PostsOrder) do
+      nil -> PostsOrder.changeset(%PostsOrder{}, attrs)
+      posts_order -> PostsOrder.changeset(posts_order, attrs)
+    end
+    |> Repo.insert_or_update()
   end
 end

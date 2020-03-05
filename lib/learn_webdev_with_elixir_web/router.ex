@@ -35,6 +35,10 @@ defmodule LearnWebdevWithElixirWeb.Router do
     resources "/users", UserController, only: [:index, :show, :create, :edit, :update, :delete]
 
     resources("/posts", PostController, only: [:new, :index, :create, :edit, :update, :delete])
+
+    get("/posts/sort_posts", PostController, :sort_posts)
+
+    post("/posts/save_posts_order", PostController, :save_posts_order)
   end
 
   scope "/", LearnWebdevWithElixirWeb do

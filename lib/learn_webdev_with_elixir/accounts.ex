@@ -86,8 +86,11 @@ defmodule LearnWebdevWithElixir.Accounts do
 
   """
   def update_user(%User{} = user, attrs) do
-    attrs = Map.put(attrs, :permissions, [attrs["permissions"]])
-
+    attrs = if attrs["permissions"] do
+      attrs |> Map.merge(%{"permissions" => [attrs["permissions"]]})
+    else
+      attrs
+    end
     user
     |> User.update_changeset(attrs)
     |> Repo.update()

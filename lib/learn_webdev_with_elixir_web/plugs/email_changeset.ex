@@ -11,8 +11,6 @@ defmodule LearnWebdevWithElixirWeb.Plugs.EmailChangeset do
     email_changeset = Subscribers.change_email(%Email{})
     posts = Content.list_posts()
     pages = Content.list_pages()
-    conn = assign(conn, :email_changeset, email_changeset)
-    conn = assign(conn, :posts, posts)
-    conn = assign(conn, :pages, pages)
+    assign(conn, :email_changeset, email_changeset) |> assign(:posts, posts) |> assign(:pages, pages)
   end
 end

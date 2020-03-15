@@ -15,8 +15,9 @@ defmodule LearnWebdevWithElixirWeb.UserController do
         |> put_flash(:info, "User created successfully.")
         |> redirect(to: Routes.user_path(conn, :show, user))
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+      {:error, %Ecto.Changeset{} = _changeset} ->
+        users = Accounts.list_users()
+        render(conn, "index.html", users: users)        
     end
   end
 

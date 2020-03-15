@@ -1,6 +1,5 @@
 defmodule LearnWebdevWithElixir.ContentTest do
   use LearnWebdevWithElixir.DataCase
-
   alias LearnWebdevWithElixir.Content
 
   describe "posts" do
@@ -57,6 +56,39 @@ defmodule LearnWebdevWithElixir.ContentTest do
     test "change_post/1 returns a post changeset" do
       {:ok, post} = Fixture.post_fixture(@valid_post_attrs)
       assert %Ecto.Changeset{} = Content.change_post(post)
+    end
+
+    @tag run: true
+    test "sorted_posts/0 returns sorted posts" do
+      Fixture.posts_fixture()
+      post_list = Content.list_posts()
+      ids = Enum.map(post_list, fn post->
+        post.id
+      end)
+
+      sort_order = Enum.shuffle(ids) |> Enum.join(",") 
+      {:ok, post_order } = Content.save_posts_order(%{"order" => sort_order})
+      
+      sorted_post = Content.list_posts()
+      assert Enum.map(sorted_post, &(&1.id)) |> Enum.join(",") == post_order.order
+    end
+
+    @tag run: true
+    test "sorted_posts/0 update order and returns sorted posts" do
+      Fixture.posts_fixture()
+      post_list = Content.list_posts()
+      ids = Enum.map(post_list, fn post->
+        post.id
+      end)
+
+      sort_order = Enum.shuffle(ids) |> Enum.join(",") 
+      {:ok, _post_order } = Content.save_posts_order(%{"order" => sort_order})
+      _updated_sort_order = Enum.shuffle(ids) |> Enum.join(",")
+
+      {:ok, post_order } = Content.save_posts_order(%{"order" => sort_order})
+      
+      sorted_post = Content.list_posts()
+      assert Enum.map(sorted_post, &(&1.id)) |> Enum.join(",") == post_order.order
     end
   end
 
@@ -168,5 +200,6 @@ defmodule LearnWebdevWithElixir.ContentTest do
       {:ok, page} = Fixture.page_fixture(@valid_page_attrs)
       assert %Ecto.Changeset{} = Content.change_page(page)
     end
+    
   end
 end

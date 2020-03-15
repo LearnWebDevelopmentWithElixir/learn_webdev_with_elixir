@@ -23,9 +23,9 @@ defmodule LearnWebdevWithElixirWeb.Router do
   #   plug LearnWebdevWithElixirWeb.Policies, {:admin_permission, "dashboard"}
   # end
 
-  pipeline :api do
-    plug(:accepts, ["json"])
-  end
+  # pipeline :api do
+  #   plug(:accepts, ["json"])
+  # end
 
   scope "/", LearnWebdevWithElixirWeb do
     pipe_through([:browser, :logged_in, :admin])

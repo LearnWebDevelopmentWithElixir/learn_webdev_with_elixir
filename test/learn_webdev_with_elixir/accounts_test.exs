@@ -34,7 +34,7 @@ defmodule LearnWebdevWithElixir.AccountsTest do
     test "update_user/2 with valid data updates the user" do
       {:ok, user} = Fixture.user_fixture(@valid_user_attrs)
       assert {:ok, %User{} = user} = Accounts.update_user(user, @update_user_attrs)
-      assert user.first_name == @update_user_attrs.first_name
+      assert user.first_name == @update_user_attrs["first_name"]
     end
 
     @tag run: true
@@ -56,6 +56,11 @@ defmodule LearnWebdevWithElixir.AccountsTest do
       {:ok, user} = Fixture.user_fixture(@valid_user_attrs)
       assert %Ecto.Changeset{} = Accounts.change_user(user)
     end
+
+    @tag run: true
+    test "new/ returns an empty user changeset" do      
+      assert %Ecto.Changeset{} = Accounts.new()
+    end    
 
     @tag run: true
     test "check unique constraint for email" do

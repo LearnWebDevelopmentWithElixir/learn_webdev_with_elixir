@@ -6,7 +6,7 @@ defmodule LearnWebdevWithElixir.Content.Post.Comment do
 
   schema "comments" do
     field :body, :string
-    belongs_to :author, User
+    belongs_to :user, User
     belongs_to :post, Post
 
     timestamps()

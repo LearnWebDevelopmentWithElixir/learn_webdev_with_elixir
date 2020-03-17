@@ -16,10 +16,6 @@ config :learn_webdev_with_elixir, LearnWebdevWithElixirWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
-config(:chat, LearnWebdevWithElixirWeb.Endpoint,
-  check_origin: ["//intense-tundra-88578.herokuapp.com"]
-)
-
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

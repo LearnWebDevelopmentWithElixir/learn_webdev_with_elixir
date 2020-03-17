@@ -10,7 +10,14 @@ defmodule LearnWebdevWithElixir.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -19,8 +26,8 @@ defmodule LearnWebdevWithElixir.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {LearnWebdevWithElixir.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      mod: {LearnWebdevWithElixir.Application, [:timex]},
+      extra_applications: [:logger, :runtime_tools, :recaptcha]
     ]
   end
 
@@ -42,7 +49,17 @@ defmodule LearnWebdevWithElixir.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:timex, "~> 3.6"},
+      {:stein, "~> 0.5"},
+      {:stein_phoenix, "~> 0.2.1"},
+      {:earmark, "~> 1.3"},
+      {:makeup_elixir, "~> 0.14"},
+      {:ex_doc, "~> 0.21.3"},
+      {:recaptcha, "~> 3.0"},
+      {:poison, "~> 3.1.0"},
+      {:policy_wonk, "~> 1.0"},
+      {:excoveralls, "~> 0.11.2", only: [:test, :dev]}
     ]
   end
 

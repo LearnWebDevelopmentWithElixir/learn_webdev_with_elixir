@@ -4,53 +4,113 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>LearnWebdevWithElixir · Phoenix Framework</title>
+    <%= csrf_meta_tag %>
+    <title>Learn Web devevelopment With Elixir</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
   </head>
   <body>
-    <div class="blog-masthead">
-      <div class="container">
-        <nav class="nav blog-nav">
-          <a class="nav-link active" href="/">Home</a>
-          <a class="nav-link" href="#">About</a>
-          <a class="nav-link" href="#">Contact Us</a>
-        </nav>
+    <header class="blog-masthead navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
+      <div style="float:left;color:white;">
+        <h1 style="color:#edd;";>Learn Web Development with Elixir</h1>
       </div>
-    </div>
+      <div style="float:left;width:30px;">
 
-    <div class="blog-header">
-      <div class="container">
-        <h1 class="blog-title">Learn Web Development with Elixir</h1>
-        <p class="lead blog-description">Elixir Web development blog</p>
       </div>
-    </div>
+      <div class="navbar-nav-scroll">
+        <ul class="navbar-nav bd-navbar-nav flex-row">
+          <li class="nav-item">
+            <a class="nav-link " href="/" onclick="ga('send', 'event', 'Navbar', 'Community links', 'Bootstrap');">Home</a>
+          </li>
+          <%= for page <- @pages do %>
+            <li class="nav-item">
+              <%= link page.title, to: Routes.page_path(@conn, :show, page), class: "nav-link" %>
+            </li>
 
+          <% end %>
+        </ul>
+      </div>
+
+      <ul class="navbar-nav ml-md-auto">
+        <%= if Map.has_key?(assigns, :current_user) do %>
+          <li class="nav-item">
+            <%= link("Sign Out", to: Routes.session_path(@conn, :delete), method: :delete, class: "nav-link") %>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link("Register", to: Routes.registration_path(@conn, :new), class: "nav-link") %>
+          </li>
+          <li class="nav-item">
+            <%= link("Sign In", to: Routes.session_path(@conn, :new), class: "nav-link") %>
+          </li>
+        <% end %>
+      </ul>
+    </header>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-2 blog-sidebar">
+        <div class="col-2">
           <div class="sidebar-module">
             <h4>Posts</h4>
-            <ul class="list-styled">
+            <ul class="list-group list-group-flush">
               <%= if @posts do %>
                 <%= for post <- @posts do %>
-                  <li><%= link post.title, to: Routes.post_path(@conn, :show, post) %></li>
+                  <li class="list-group-item"><%= link post.title, to: Routes.post_path(@conn, :show, post) %></li>
                 <% end %>
               <% end  %>
             </ul>
           </div>
         </div>
+        <div class="col-10">
 
-        <div class="col-sm-8">
-          <main role="main" class="container">
-            <% if get_flash(@conn, :info) do %>
-              <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-            <% end %>
-            <% if get_flash(@conn, :error) do %>
-              <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-            <% end %>
-            <%= render @view_module, @view_template, assigns %>
-          </main>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-9">
+                <main role="main" class="container">
+                  <%= if get_flash(@conn, :info) do %>
+                    <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+                  <% end %>
+                  <%= if get_flash(@conn, :error) do %>
+                    <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+                  <% end %>
+                  <%= render @view_module, @view_template, assigns %>
+                </main>
+              </div>
+
+              <div class="col-sm-3">
+                <div class="subscribe">
+                  Subscribe to Learn Web Development with Elixir updates <br />
+                  Add your e-mail below to receive e-mails with Learn Web Dev with Elixir Updates.
+
+                  <%= form_for @email_changeset, "/subscribe/", fn f -> %>
+                    <%= if @email_changeset.action do %>
+                      <div class="alert alert-danger">
+                        <p>Oops, something went wrong! Please check the errors below.</p>
+                      </div>
+                    <% end %>
+
+                    <%= if get_flash(@conn, :subscription_success) do %>
+                      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :subscription_success) %></p>
+                    <% end %>
+                    <%= if get_flash(@conn, :subscription_failed) do %>
+                      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :subscription_failed) %></p>
+                    <% end %>
+
+                    <%= label f, :email %>
+                    <%= email_input f, :email, placeholder: "Email",  class: "form-control"  %>
+
+                    <%= error_tag f, :email %>
+
+                    <%= raw Recaptcha.Template.display() %>
+
+                    <div>
+                      <%= submit "Subscribe", class: "btn-primary"  %>
+                    </div>
+                  <% end %>
+
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -61,6 +121,7 @@
         <a href="#">Back to top</a>
       </p>
     </footer>
+
 
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>

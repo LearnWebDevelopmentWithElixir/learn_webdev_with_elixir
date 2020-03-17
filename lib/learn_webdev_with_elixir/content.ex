@@ -1,4 +1,6 @@
 defmodule LearnWebdevWithElixir.Content do
+  alias LearnWebdevWithElixir.Content.PostsOrder
+
   @moduledoc """
   The Content context.
   """
@@ -7,7 +9,9 @@ defmodule LearnWebdevWithElixir.Content do
   alias LearnWebdevWithElixir.Repo
 
   alias LearnWebdevWithElixir.Content.Post
+  alias LearnWebdevWithElixir.Content.PostsOrder
   alias LearnWebdevWithElixir.Content.Post.Comment
+  alias LearnWebdevWithElixir.Accounts.User
 
   @doc """
   Returns the list of posts.
@@ -19,7 +23,27 @@ defmodule LearnWebdevWithElixir.Content do
 
   """
   def list_posts do
-    Repo.all(Post)
+    posts =
+      Post
+      |> Repo.all()
+      |> Repo.preload(:user)
+
+    get_sorted_posts(posts)
+  end
+
+  defp get_sorted_posts(posts) do
+    posts_order = Repo.one(PostsOrder)
+
+    sorted_posts =
+      if posts_order do
+        Enum.map(String.split(posts_order.order, ","), fn r ->
+          Enum.find(posts, fn p -> String.to_integer(r) == p.id end)
+        end)
+      else
+        []
+      end
+
+    Enum.uniq(sorted_posts ++ posts)
   end
 
   @doc """
@@ -39,7 +63,8 @@ defmodule LearnWebdevWithElixir.Content do
   def get_post!(id) do
     Post
     |> Repo.get!(id)
-    |> Repo.preload(:comments)
+    |> Repo.preload(:user)
+    |> Repo.preload(comments: [:user])
   end
 
   @doc """
@@ -54,8 +79,9 @@ defmodule LearnWebdevWithElixir.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_post(attrs \\ %{}) do
-    %Post{}
+  def create_post(%User{} = user, attrs \\ %{}) do
+    user
+    |> Ecto.build_assoc(:posts)
     |> Post.changeset(attrs)
     |> Repo.insert()
   end
@@ -148,9 +174,9 @@ defmodule LearnWebdevWithElixir.Content do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_comment(%Post{} = post, attrs \\ %{}) do
-    post
-    |> Ecto.build_assoc(:comments)
+  def create_comment(%Post{} = post, %User{} = user,attrs \\ %{}) do
+    user
+    |> Ecto.build_assoc(:comments, post_id: post.id)
     |> Comment.changeset(attrs)
     |> Repo.insert()
   end
@@ -200,5 +226,109 @@ defmodule LearnWebdevWithElixir.Content do
   """
   def change_comment(%Comment{} = comment) do
     Comment.changeset(comment, %{})
+  end
+
+  alias LearnWebdevWithElixir.Content.Page
+
+  @doc """
+  Returns the list of pages.
+
+  ## Examples
+
+      iex> list_pages()
+      [%Page{}, ...]
+
+  """
+  def list_pages do
+    Repo.all(Page)
+  end
+
+  @doc """
+  Gets a single page.
+
+  Raises `Ecto.NoResultsError` if the Page does not exist.
+
+  ## Examples
+
+      iex> get_page!(123)
+      %Page{}
+
+      iex> get_page!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_page!(id), do: Repo.get!(Page, id)
+
+  @doc """
+  Creates a page.
+
+  ## Examples
+
+      iex> create_page(%{field: value})
+      {:ok, %Page{}}
+
+      iex> create_page(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_page(attrs \\ %{}) do
+    %Page{}
+    |> Page.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a page.
+
+  ## Examples
+
+      iex> update_page(page, %{field: new_value})
+      {:ok, %Page{}}
+
+      iex> update_page(page, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_page(%Page{} = page, attrs) do
+    page
+    |> Page.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a page.
+
+  ## Examples
+
+      iex> delete_page(page)
+      {:ok, %Page{}}
+
+      iex> delete_page(page)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_page(%Page{} = page) do
+    Repo.delete(page)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking page changes.
+
+  ## Examples
+
+      iex> change_page(page)
+      %Ecto.Changeset{source: %Page{}}
+
+  """
+  def change_page(%Page{} = page) do
+    Page.changeset(page, %{})
+  end
+
+  def save_posts_order(attrs \\ %{}) do
+    case Repo.one(PostsOrder) do
+      nil -> PostsOrder.changeset(%PostsOrder{}, attrs)
+      posts_order -> PostsOrder.changeset(posts_order, attrs)
+    end
+    |> Repo.insert_or_update()
   end
 end

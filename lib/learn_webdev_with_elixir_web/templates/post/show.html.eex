@@ -1,15 +1,34 @@
-<div class="blog-post">
+<div class="blog-post shadow rounded">
   <h2 class="blog-post-title"><%= @post.title %></h2>
-  <p class="blog-post-meta">January 1, 2020 by <a href="#">Justus</a></p>
-  <%= @post.body %>
+  <p class="blog-post-meta"><%= list_date_format @post.inserted_at %> by <a href="#"><%=  user_name @post %></a></p>
+  <%= raw(@post.body |> Earmark.as_html!(%Earmark.Options{
+      code_class_prefix: "language-",
+      smartypants: false
+  })) %>
 </div>
 
+<div class="related_posts" >
+  Other posts
+  <div class="container" >
+    <div class="row" style="width:100%;">
+      <% remaining_posts = Enum.reject(@posts, fn post -> post.id == @post.id end) %>
+      <%= if !Enum.empty?(remaining_posts) do %>
+      <div class="col-6" >
+        <%= link List.first(remaining_posts).title, to: Routes.post_path(@conn, :show, List.first(remaining_posts)) %>
+      </div>
+      <div class="col-6">
+        <%= link List.last(remaining_posts).title, to: Routes.post_path(@conn, :show, List.first(remaining_posts)) %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
 
 <h5>Comments</h5>
 
 <div>
   <%= for comment <- @post.comments do%>
-    <p><div class="comment"><%= comment.body %> <small>by Max</small></div></p>
+    <p><div class="blog_comment rounded"><%= comment.body %> <small>by <%=  user_name comment %></small></div></p>
   <% end %>
 </div>
 

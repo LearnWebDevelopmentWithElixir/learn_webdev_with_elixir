@@ -2,16 +2,10 @@ defmodule LearnWebdevWithElixirWeb.UserController do
   use LearnWebdevWithElixirWeb, :controller
 
   alias LearnWebdevWithElixir.Accounts
-  alias LearnWebdevWithElixir.Accounts.User
 
   def index(conn, _params) do
     users = Accounts.list_users()
     render(conn, "index.html", users: users)
-  end
-
-  def new(conn, _params) do
-    changeset = Accounts.change_user(%User{})
-    render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"user" => user_params}) do
@@ -21,8 +15,9 @@ defmodule LearnWebdevWithElixirWeb.UserController do
         |> put_flash(:info, "User created successfully.")
         |> redirect(to: Routes.user_path(conn, :show, user))
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+      {:error, %Ecto.Changeset{} = _changeset} ->
+        users = Accounts.list_users()
+        render(conn, "index.html", users: users)        
     end
   end
 

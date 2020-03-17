@@ -1,0 +1,6 @@
+<h3>Sort Posts</h3>
+<ol id="items" style="list-style-type:decimal">
+  <%= for post <- @posts do %>
+    <li  data-id="<%= post.id  %>" ><%= link post.title, to: Routes.post_path(@conn, :show, post) %></li>
+  <% end %>
+</ol>

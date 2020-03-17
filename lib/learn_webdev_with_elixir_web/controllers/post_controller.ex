@@ -5,23 +5,29 @@ defmodule LearnWebdevWithElixirWeb.PostController do
   alias LearnWebdevWithElixir.Content.{Post, Post.Comment}
 
   def list(conn, _params) do
-    posts = Content.list_posts()
-    render(conn, "list.html", posts: posts)
+    conn
+    |> render("list.html")
   end
 
   def index(conn, _params) do
-    posts = Content.list_posts()
-    render(conn, "index.html", posts: posts)
+    conn
+    |> render("index.html")
+  end
+
+  def sort_posts(conn, _params) do
+    conn
+    |> render("sort_posts.html")
   end
 
   def new(conn, _params) do
     changeset = Content.change_post(%Post{})
-    posts = Content.list_posts()
-    render(conn, "new.html", posts: posts, changeset: changeset)
+    render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"post" => post_params}) do
-    case Content.create_post(post_params) do
+    %{current_user: user} = conn.assigns
+
+    case Content.create_post(user, post_params) do
       {:ok, post} ->
         conn
         |> put_flash(:info, "Post created successfully.")
@@ -34,21 +40,22 @@ defmodule LearnWebdevWithElixirWeb.PostController do
 
   def show(conn, %{"id" => id}) do
     post = Content.get_post!(id)
-    posts = Content.list_posts()
     comment_changeset = Content.change_comment(%Comment{})
-    render(conn, "show.html", post: post, posts: posts, comment_changeset: comment_changeset)
+
+    render(conn, "show.html",
+      post: post,
+      comment_changeset: comment_changeset
+    )
   end
 
   def edit(conn, %{"id" => id}) do
     post = Content.get_post!(id)
-    posts = Content.list_posts()
     changeset = Content.change_post(post)
-    render(conn, "edit.html", post: post, posts: posts, changeset: changeset)
+    render(conn, "edit.html", post: post, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "post" => post_params}) do
     post = Content.get_post!(id)
-    posts = Content.list_posts()
 
     case Content.update_post(post, post_params) do
       {:ok, post} ->
@@ -57,7 +64,7 @@ defmodule LearnWebdevWithElixirWeb.PostController do
         |> redirect(to: Routes.post_path(conn, :show, post))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", post: post, posts: posts, changeset: changeset)
+        render(conn, "edit.html", post: post, changeset: changeset)
     end
   end
 
@@ -68,5 +75,10 @@ defmodule LearnWebdevWithElixirWeb.PostController do
     conn
     |> put_flash(:info, "Post deleted successfully.")
     |> redirect(to: Routes.post_path(conn, :index))
+  end
+
+  def save_posts_order(conn, params) do
+    Content.save_posts_order(params)
+    text(conn, "done")
   end
 end
